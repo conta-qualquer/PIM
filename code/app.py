@@ -2,12 +2,14 @@ from string import ascii_letters , digits
 from random import choice
 from aluno import Aluno
 from turma import Turma
+from atividade import Atividade
+from registro_aula import RegistroAula
 from lista_alunos import ListaAlunos
 from lista_turmas import ListaTurma
 from lista_aulas import ListaAulas
-from registro_aula import RegistroAula
-from atividade import Atividade
+from lista_atividades import ListaAtividade
 from menus  import *
+
 
 
 def id_generator():
@@ -37,18 +39,22 @@ def registro_aula():
     
 def cadastro_atividade():
     nome = str(input("\nDigite o nome da atividade: ")).strip()
-    tipo = str(input("Digite o tipo da aitvidade: ")).strip()
-    prazo = str(input("Digite o prazo da Atividade: ")).strip()
-    dificuldade = str(input("Digite a Dificuladade da Atividade: ")).strip()
+    data = str(input("Digite a data da atividade: ")).strip()
+    turma = str(input("Digite o nome da turma que será realizada a atividade: ")).strip()
+    return Atividade(nome,data,turma)
 
 def continuar():
         op = str(input("Deseja voltar para o menu principal ? :  [S/N]")).lower().strip()
         if op == 'n':
              return op == 'n'
 
+def verificar_vazio(lista):
+        return True if len(lista) == 0 else False
+
 alunos_list = ListaAlunos()
 turma_list = ListaTurma()
 aula_list = ListaAulas()
+atividade_list = ListaAtividade()
 
 while True:
     
@@ -76,16 +82,16 @@ while True:
                 print("Cadastre uma turma primeiro para poder cadastrar alunos\n")
                  
         elif op1 == '2':
-            print("\n----------Alunos Cadastrados no Sistema----------\n")
-            if 0 == len(alunos_list):
-                print("\nNÃO HÁ ALUNOS CADASTRADOS NO SISTEMA!\n")
+            if verificar_vazio(alunos_list):
+                print("\nNão há alunos Cadastrados no Sistema!!\n")
             else:
+                print("\n----------Alunos Cadastrados no Sistema----------\n")
                 alunos_list.print_list()
         elif op1 == '3':
-            buscar = str(input('\nDigite o RA do aluno que deseja buscar: ')).strip()
-            if 0 == len(alunos_list):
-                print("\nNÃO HÁ ALUNOS CADASTRADOS NO SISTEMA!\n")
+            if verificar_vazio(alunos_list):
+                print("\nNão há alunos Cadastrados no Sistema!!\n")
             else:
+                buscar = str(input('\nDigite o RA do aluno que deseja buscar: ')).strip()
                 for aluno in alunos_list.list_():
                     if buscar == aluno.id:
                         print('\n------------ALUNO ENCONTRADO COM SUCESSO--------------\n')
@@ -102,13 +108,14 @@ while True:
             turma_list.append(turma_nova)
             print("\nTurma Cadastrada com Sucesso ✅!!\n")
         elif op1 == '2':
-            if 0 == len(turma_list):
-                print("\nNÃO HÁ TURMAS CADASTRADAS NO SISTEMA!!\n")
+            if verificar_vazio(turma_list):
+                print("\nNão há Turmas Cadastradas no Sistemas!!\n")
             else:
+                print("\n---------Turmas Cadastradas no Sistema------------\n")
                 turma_list.print_list()
         elif op1 == '3':
-            if 0 == len(turma_list):
-                print("\nNÃO HÁ TURMAS CADASTRADAS!!\n")
+            if verificar_vazio(turma_list):
+                print("\nNão há Turmas Cadastradas no Sistema!!\n")
             else:
                 buscar = str(input("\nDigite o nome da Turma: ")).strip()
                 print("\n----------ALUNOS NA TURMA {}----------\n".format(buscar))
@@ -118,37 +125,77 @@ while True:
                     else:
                         print("\nTURMA NÃO ENCONTRADA NO SISTEMA!!\n")
     elif op == '3':
-        if 0 == len(turma_list):
-            print("\nNão existe Turmas no Sistema!!\n")
+        if verificar_vazio(turma_list):
+            print("\nNão há Turmas Cadastradas no Sistema!!\n")
+            print("Cadastre uma Turma para Registrar uma Aula!!\n")
         else:
             menu_aulas()
             if (op1 := str(input("\nDigite uma das opções acima: ")).strip()) == '1':
                 aula_nova = registro_aula()
-                aula_list.append(aula_nova)
-                print("\nAula cadastrada com sucesso✅!!\n")
+                verificar_aula = False
+                for turma in turma_list.list_():
+                    if turma.nome == aula_nova.turma:
+                        aula_list.append(aula_nova)
+                        print("\nAula cadastrada com sucesso✅!!\n")
+                        verificar_aula = True
+                if not verificar_aula:
+                    print("\nA turma {} Não Existe Cadastrada no Sistema!!\n".format(aula_nova.turma))
             elif op1 == '2':
                 buscar = str(input("\nDigite o nome da turma para saber suas aulas: ")).strip()
-                if 0 == len(aula_list):
-                    print(f"\nNão existe nenhuma turma no sistema!")
-                else:
-                    print("\n----------Aulas da Turma {}----------".format(buscar))
-                    verificar = False
-                    for aulas in aula_list.list_():
-                        if aulas.turma == buscar:
-                            print(f"\nData da Aula : {aulas.data} | Tema da Aula{aulas.tema}\n")
-                            verificar = True
-                    if not verificar:
-                        print("\nTurma não Encontrada!!\n")
+                print("\n----------Aulas da Turma {}----------".format(buscar))
+                verificar = False
+                for aulas in aula_list.list_():
+                    if aulas.turma == buscar:
+                        print(f"\nData da Aula : {aulas.data} | Tema da Aula{aulas.tema}\n")
+                        verificar = True
+                if not verificar:
+                    print("\nTurma não Encontrada!!\n")
             elif op1 == '3':
                 buscar = str(input("\nDigite a data da aula para consulta-lá: ")).strip()
                 verificar = False
-                print("------------Aulas da Turma {}--------------".format(buscar))
+                print("\n------------Aulas da Turma {}--------------".format(buscar))
                 for aulas in aula_list.list_():
                     if buscar == aulas.data:
                         print(f"\nData da Aula : {aulas.data} | Tema da Aula : {aulas.tema}\n")
                         verificar = True
                 if not verificar:
                     print("\nTurma não Encontrada no Sistema!!\n")
+    elif op == '4':
+        if verificar_vazio(turma_list):
+            print("\nNão há Turmas Cadastradas no Sistema!!\n")
+            print("Cadastre uma Turma para Registrar uma Atividade!!\n")
+        else:
+            menu_atividade()
+            if (op1 := str(input("\nDigite uma das opções acima: ")).strip()) == '1':
+                print("\n------------Cadastro de Atividade------------")
+                atividade_nova = cadastro_atividade()
+                verificar_atividade = False
+                for turma in turma_list.list_():
+                    if turma.nome == atividade_nova.turma:
+                        atividade_list.append(atividade_nova)
+                        print("\nAtividade Cadastrada com Sucesso✅!!\n")
+                        verificar_atividade = True
+                if not verificar_atividade:
+                    print("\nEstá Turma não Existe!!\n")
+            elif op1 == '2':
+                print("--------------Atividades Cadastradas no Sistema---------------")
+                atividade_list.print_list()
+            elif op1 == '3':
+                print("\n---------------Busca Atividade--------------\n")
+                buscar = str(input("\nDigite a turma que deseja ver as Atividades: ")).strip()
+                verificar_atividade = False
+                print("\n------------Atividades da Turma {}------------\n".format(buscar))
+                for atividade in atividade_list.list_():
+                    if atividade.turma == buscar:
+                        print(f"\nNome da Atividade : {atividade.nome} | Data da Atividade : {atividade.data}")
+                        verificar_atividade = True
+                if not verificar_atividade:
+                    print("\nNão há atividades na Turma {}\n".format(buscar))
+    elif op == '5':
+        print("-------------Bem Vindo a IA ACADEMY!!------------")
+    elif op == '7':
+        print("\nPROGRAMA ENCERRADO\n")
+        break
 
     if continuar():
         print("\nPROGRAMA ENCERRADO\n")
