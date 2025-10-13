@@ -3,3 +3,6 @@ class Atividade():
         self.nome = nome
         self.data = data
         self.turma = turma
+    
+    def __str__(self) -> str:
+        return 'Nome da Atividade : {} | Data da Atividade : {} | Turma : {}'.format(self.nome,self.data,self.turma)
