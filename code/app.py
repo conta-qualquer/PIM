@@ -2,48 +2,17 @@ from string import ascii_letters , digits
 from random import choice
 from aluno import Aluno
 from turma import Turma
-from lista_alunos import LISTALUNOS
-from lista_turmas import LISTATURMA
+from lista_alunos import ListaAlunos
+from lista_turmas import ListaTurma
+from lista_aulas import ListaAulas
 from registro_aula import RegistroAula
 from atividade import Atividade
+from menus  import *
 
-def menu_principal():
-    print("\n\n------------Bem Vindo ao Menu Principal------------")
-    print("\n1-Gerenciar Alunos")
-    print("2-Gerenciar Turmas")
-    print("3-Gerenciar Aulas")
-    print("4-Gerenciar Atividades")
-    print("5-Inteligencia Artificial")
-    print("6-Relatorios e Consultas")
-    print("7-sair")
-
-def menu_aluno():
-    print("\n----------GERENCIAR ALUNO----------")
-    print("\n1-Cadastrar Aluno")
-    print("2-Listar Alunos")
-    print("3-Buscar Aluno")
-
-def menu_turma():
-    print("\n----------GERENCIAR TURMA----------")
-    print("\n1-Cadastrar Turma")
-    print("2-Listar Turmas")
-    print("3-Ver alunos da Turma")
-
-def menu_aulas():
-    print("\n----------GERENCIAR AULAS----------")
-    print("\n1-Registrar Aulas")
-    print("2-Listar Aulas de uma Turma")
-    print("3-Consulta aulas por Data")
-
-def menu_atividade():
-    print("\n----------GERENCIAR ATIVIDADE----------")
-    print("\n1-Cadastrar Atividade")    
-    print("2-Listar Atividade")    
-    print("3-Consulta Atividade por Turma")
 
 def id_generator():
     caracters = ascii_letters + digits
-    return ''.join(choice(caracters) for i in range(7))   
+    return ''.join(choice(caracters) for i in range(7)) 
 
 def cadastro_aluno():
     print("\n----------CADASTRO ALUNO----------")
@@ -59,10 +28,12 @@ def cadastro_turma():
     curso = str(input("Digite o curso da turma: ")).strip()
     return Turma(nome,semestre,curso)
  
-def registro():
+def registro_aula():
+    print("\n------------Registro de Aula--------------")
     dia = str(input("\nDigite a data da Aula: "))
     tema = str(input("Digite o tema da Aula: "))
     turma = str(input("Digite a Turma: "))  
+    return RegistroAula(dia,turma,tema)
     
 def cadastro_atividade():
     nome = str(input("\nDigite o nome da atividade: ")).strip()
@@ -70,15 +41,16 @@ def cadastro_atividade():
     prazo = str(input("Digite o prazo da Atividade: ")).strip()
     dificuldade = str(input("Digite a Dificuladade da Atividade: ")).strip()
 
-alunos_list = LISTALUNOS()
-turma_list = LISTATURMA()
-
-while True:
-
-    def continuar():
+def continuar():
         op = str(input("Deseja voltar para o menu principal ? :  [S/N]")).lower().strip()
         if op == 'n':
              return op == 'n'
+
+alunos_list = ListaAlunos()
+turma_list = ListaTurma()
+aula_list = ListaAulas()
+
+while True:
     
     menu_principal()
 
@@ -89,11 +61,20 @@ while True:
 
     if op == '1':
         menu_aluno()
+        verificar = False
         if (op1 := str(input("\nDigite umas das opções acima: ").strip())) == '1':
             aluno_novo = cadastro_aluno()
-            alunos_list.append(aluno_novo)
-            print("\nCadastro do aluno(a) {} feito com sucesso ✅!!".format(aluno_novo.nome))
-            print("RA do Aluno(a) {} é : {}\n".format(aluno_novo.nome,aluno_novo.id))
+            for turma in turma_list.list_():
+                if turma.nome == aluno_novo.turma:
+                    alunos_list.append(aluno_novo)
+                    print("\nCadastro do aluno(a) {} feito com sucesso ✅!!".format(aluno_novo.nome))
+                    print("RA do Aluno(a) {} é : {}\n".format(aluno_novo.nome,aluno_novo.id))
+                    verificar = True
+                    break
+            if not verificar:
+                print("\n😔Não foi possivel fazer o cadastro do aluno pois esta turma não existe!!")
+                print("Cadastre uma turma primeiro para poder cadastrar alunos\n")
+                 
         elif op1 == '2':
             print("\n----------Alunos Cadastrados no Sistema----------\n")
             if 0 == len(alunos_list):
@@ -136,6 +117,39 @@ while True:
                         print(f"\n-{aluno.nome}\n")
                     else:
                         print("\nTURMA NÃO ENCONTRADA NO SISTEMA!!\n")
+    elif op == '3':
+        if 0 == len(turma_list):
+            print("\nNão existe Turmas no Sistema!!\n")
+        else:
+            menu_aulas()
+            if (op1 := str(input("\nDigite uma das opções acima: ")).strip()) == '1':
+                aula_nova = registro_aula()
+                aula_list.append(aula_nova)
+                print("\nAula cadastrada com sucesso✅!!\n")
+            elif op1 == '2':
+                buscar = str(input("\nDigite o nome da turma para saber suas aulas: ")).strip()
+                if 0 == len(aula_list):
+                    print(f"\nNão existe nenhuma turma no sistema!")
+                else:
+                    print("\n----------Aulas da Turma {}----------".format(buscar))
+                    verificar = False
+                    for aulas in aula_list.list_():
+                        if aulas.turma == buscar:
+                            print(f"\nData da Aula : {aulas.data} | Tema da Aula{aulas.tema}\n")
+                            verificar = True
+                    if not verificar:
+                        print("\nTurma não Encontrada!!\n")
+            elif op1 == '3':
+                buscar = str(input("\nDigite a data da aula para consulta-lá: ")).strip()
+                verificar = False
+                print("------------Aulas da Turma {}--------------".format(buscar))
+                for aulas in aula_list.list_():
+                    if buscar == aulas.data:
+                        print(f"\nData da Aula : {aulas.data} | Tema da Aula : {aulas.tema}\n")
+                        verificar = True
+                if not verificar:
+                    print("\nTurma não Encontrada no Sistema!!\n")
+
     if continuar():
         print("\nPROGRAMA ENCERRADO\n")
         break
