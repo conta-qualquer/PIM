@@ -3,7 +3,7 @@ class Node:
         self.data = data
         self.next = None
 
-class LISTALUNOS:
+class ListaAlunos:
     def __init__(self):
         self.head = None
         self.size = 0
