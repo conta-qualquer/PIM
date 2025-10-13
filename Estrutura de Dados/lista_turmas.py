@@ -3,7 +3,7 @@ class Node:
         self.data = data
         self.next = None
 
-class LISTATURMA:
+class ListaTurma:
     def __init__(self):
         self.head = None
         self.size = 0
