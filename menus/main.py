@@ -5,7 +5,7 @@ from menus import *
 def sistema_academico():
 
     carregar_dados()
-    salvar_dados()
+    
 
     while True:
         limpar_tela()
@@ -26,9 +26,11 @@ def sistema_academico():
         if funcao:
             funcao()
             if opcao == '7':
+                salvar_dados()
                 break
             if continuar():
                 print("\nPROGRAMA ENCERRADO\n")
+                salvar_dados()
                 break
         else:
             print("\nDigite um valor válido\n")
