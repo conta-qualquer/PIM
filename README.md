@@ -24,3 +24,15 @@ Sistema simples e modular para gerenciamento de alunos, turmas, atividades e rel
 git clone https://github.com/seu-usuario/seu-repo.git
 cd seu-repo
 python main.py
+
+
+---
+
+## 📸 Demonstração
+
+
+---
+
+## 👩‍🏫 Autor
+Matheus Henrique De Oliveira    
+💻 [GitHub](https://github.com/conta-qualquer)
