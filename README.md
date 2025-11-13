@@ -1,19 +1,26 @@
 # 🏫 Sistema de Gestão Escolar
+![Status](https://img.shields.io/badge/status-em%20desenvolvimento-yellow)
+![Python](https://img.shields.io/badge/python-3.11-blue)
 
-Um sistema simples para apoiar a administração escolar — cadastro de alunos, turmas, registro de aulas e atividades.
-
----
-
-## 🚀 Tecnologias utilizadas
-- **Backend:** Python 
+Sistema simples e modular para gerenciamento de alunos, turmas, atividades e relatórios escolares.
 
 ---
 
-## 💡 Funcionalidades
-✅ Gerenciamento de alunos
-✅ Gerenciamento de Turmas  
-✅ Registro de Aula e Atividades 
-✅ Relatórios Gerais  
+## 🧭 Menu Principal
+| Nº | Módulo | Descrição |
+|----|---------|------------|
+| 1️⃣ | Aluno | Cadastro e consulta |
+| 2️⃣ | Turma | Gerenciamento de turmas |
+| 3️⃣ | Aula | Controle de frequência |
+| 4️⃣ | Atividade | Registro de atividades |
+| 5️⃣ | IA | Sugestões automáticas |
+| 6️⃣ | Relatório | Geração de relatórios |
+| 7️⃣ | Sair | Finaliza o programa |
 
 ---
 
+## ⚙️ Execução
+```bash
+git clone https://github.com/seu-usuario/seu-repo.git
+cd seu-repo
+python main.py
