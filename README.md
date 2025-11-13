@@ -25,13 +25,6 @@ git clone https://github.com/conta-qualquer/Pim.git
 cd Pim
 python main.py
 
-
----
-
-## 📸 Demonstração
-![Demonstração](img/demostracao.png)
-
-
 ---
 
 ## 👩‍🏫 Autor
