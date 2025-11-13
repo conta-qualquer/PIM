@@ -21,8 +21,8 @@ Sistema simples e modular para gerenciamento de alunos, turmas, atividades e rel
 
 ## ⚙️ Execução
 ```bash
-git clone https://github.com/seu-usuario/seu-repo.git
-cd seu-repo
+git clone https://github.com/conta-qualquer/Pim.git
+cd Pim
 python main.py
 
 
